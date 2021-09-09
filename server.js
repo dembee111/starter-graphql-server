@@ -5,10 +5,27 @@ const { mergeTypeDefs, mergeResolvers } = require("@graphql-tools/merge");
 const { loadFilesSync } = require("@graphql-tools/load-files");
 const http = require("http");
 const path = require("path");
+const mongoose = require("mongoose");
+
 require("dotenv").config();
 
 // express server
 const app = express();
+
+const database = async () => {
+  try {
+    const success = await mongoose.connect(process.env.DATABASE_CLOUD, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("DB connected");
+  } catch (error) {
+    console.log("DB connection Error", error);
+  }
+};
+
+// execute database connectiOn
+database();
 
 // typeDefs
 const typeDefs = mergeTypeDefs(
